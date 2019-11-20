@@ -89,6 +89,14 @@ func withoutSlackOption(l *limiter) {
 	l.maxSlack = 0
 }
 
+// FixedSlack returns an option for ratelimit.New initializes the limiter
+// with percent of any initial tolerance for bursts of traffic.
+func FixedSlack(rate float64) Option {
+	return func(l *limiter) {
+		l.maxSlack = time.Duration(int64(-rate * float64(time.Second)))
+	}
+}
+
 // Take blocks to ensure that the time spent between multiple
 // Take calls is on average time.Second/rate.
 func (t *limiter) Take() time.Time {
